@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
+using System.Web;
+using System.Web.Mail;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+
+public partial class Web_Contact : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+    protected void btnSend_Click(object sender, EventArgs e)
+    {
+        bool ok = sendMailGoogle("quatraotay.hoa@gmail.com",txtEmail.Text.Trim(),txtName.Text.Trim(),txtcontent.Text.Trim());
+    }
+    private bool sendMailGoogle(string fromMail, string toMail, string subject, string body)
+    {
+        bool isSuccess = false;
+        try
+        {
+            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            mail.From = new MailAddress(fromMail, "Thiêis bị Hồng Phúc");
+            mail.To.Add(toMail);
+            mail.Subject = subject;
+            mail.Body = "<html><body>" + "<a href=\"#\">" + subject + "</a>" + " <br />" + body + "</body></html>";
+            mail.IsBodyHtml = true;
+            SmtpServer.Port = 25;
+            SmtpServer.Credentials = new System.Net.NetworkCredential(fromMail, "123456789o0");
+            SmtpServer.EnableSsl = true;
+            SmtpServer.Send(mail);
+            isSuccess = true;
+            txtEmail.Text = string.Empty;
+            txtName.Text = string.Empty;
+            txtcontent.Text = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("sendMailGoogle()========>" + ex);
+        }
+        return isSuccess;
+
+    }
+}

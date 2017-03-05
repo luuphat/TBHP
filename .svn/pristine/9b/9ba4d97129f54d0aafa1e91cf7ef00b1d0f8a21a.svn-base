@@ -1,0 +1,396 @@
+﻿using Libs;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace DLLFuniture
+{
+    public class Slide
+    {
+        #region Member Variables
+        private int intImagesID = int.MinValue;
+        private string strTitle = string.Empty;
+        private string strImages = string.Empty;
+        private DateTime dtmInputTime = DateTime.MinValue;
+        private string strUserCreate = string.Empty;
+        private Data objDataAccess = null;
+        private bool bIsDeleted = false;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// The name of caching key
+        /// </summary>
+        public static string CacheKey
+        {
+            get { return "News.Slide"; }
+        }
+        /// Đối tượng Data truyền từ ngoài vào
+        /// </summary>
+        public Data DataObject
+        {
+            get { return objDataAccess; }
+            set { objDataAccess = value; }
+        }
+        /// <summary>
+        /// CategoryID
+        /// 
+        /// </summary>
+        public string Title
+        {
+            get { return strTitle; }
+            set { strTitle = value; }
+        }
+        /// <summary>
+        /// CategoryName
+        /// 
+        /// </summary>
+        public string Images
+        {
+            get { return strImages; }
+            set { strImages = value; }
+        }
+        public string UserCreated
+        {
+            get { return strUserCreate; }
+            set { strUserCreate = value; }
+        }
+        /// <summary>
+        /// InputTime
+        /// 
+        /// </summary>
+        public DateTime InputTime
+        {
+            get { return dtmInputTime; }
+            set { dtmInputTime = value; }
+        }
+        public int ImagesID
+        {
+            get { return intImagesID; }
+            set { intImagesID = value; }
+        }
+       
+        public bool IsDeleted
+        {
+            get { return bIsDeleted; }
+            set { bIsDeleted = value; }
+        }
+        #endregion
+
+        #region Constructor
+        public Slide()
+        {
+            //Nothing
+        }
+        #endregion
+
+        #region Methods
+        ///<summary>
+        ///Lấy đối tượng theo id
+        ///</summary>
+        /// <param name="CategoryID">ID của đối tượng </param>
+        /// <returns></returns>
+        public bool GetByID(int ImagesID)
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            bool bolOK = false;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_GetByID");
+                objData.AddParameter("@ImagesID", ImagesID);
+                IDataReader reader = objData.ExecStoreToDataReader();
+                if (reader.Read())
+                {
+
+                    if (!Convert.IsDBNull(reader["ImagesID"])) this.ImagesID = Convert.ToInt32(reader["ImagesID"]);
+                    if (!Convert.IsDBNull(reader["Title"])) this.Title = Convert.ToString(reader["Title"]);
+                    if (!Convert.IsDBNull(reader["Images"])) this.Images = Convert.ToString(reader["Images"]);
+                    if (!Convert.IsDBNull(reader["InputTime"])) this.InputTime = Convert.ToDateTime(reader["InputTime"]);
+                    if (!Convert.IsDBNull(reader["UserCreated"])) this.UserCreated = Convert.ToString(reader["UserCreated"]);
+                    bolOK = true;
+                }
+                reader.Close();
+                reader.Dispose();
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("GetByID() Error: " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return bolOK;
+        }
+
+
+        ///<summary>
+        /// Thêm mới đối tượng
+        /// Có các trường: ParentID, CategoryName
+        /// Trả về mã lỗi. Mặc định là 0 - không lỗi
+        ///</summary>
+        ///<param name="obj">Đối tượng cần thêm</param>
+        ///<returns></returns>
+        public object Add()
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            object objTemp = null;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_Insert");
+                objData.AddParameter("@Title", this.Title);
+                objData.AddParameter("@Images", this.Images);
+                objData.AddParameter("@UserCreated", this.UserCreated);
+                objData.AddParameter("@IsDeleted", this.IsDeleted);
+                objTemp = objData.ExecStoreToString();
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("Insert() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return objTemp;
+        }
+        ///<summary>
+        /// Cập nhật đối tượng
+        /// Có các trường: CategoryID, ParentID, CategoryName
+        /// Trả về mã lỗi. Mặc định là 0 - không lỗi
+        ///</summary>
+        ///<param name="obj">Đối tượng cần cập nhật</param>
+        ///<returns></returns>
+        public object Update()
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            object objTemp = null;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_Update");
+                objData.AddParameter("@ImagesID", this.ImagesID);
+                objData.AddParameter("@Title", this.Title);
+                objData.AddParameter("@Images", this.Images);
+                objTemp = objData.ExecStoreToString();
+                if (objTemp == "") { objTemp = "1"; }
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("Update() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return objTemp;
+        }
+        ///<summary>
+        /// Xóa đối tượng
+        /// Có các trường: CategoryID
+        ///</summary>
+        ///<param name="CategoryID">ID của đối tượng</param>
+        ///<param name="UserDeleted">Người xóa</param>
+        ///<returns></returns>
+        public bool Delete(int ImagesID)
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            bool bolOK = false;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_Delete");
+                objData.AddParameter("@ImagesID", ImagesID);
+                if (objData.ExecStoreToString() != "0") { bolOK = true; }
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("Delete() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return bolOK;
+        }
+        ///<summary>
+        /// Lấy tất cả đối tượng
+        ///
+        ///</summary>
+        public SlideCollection GetAll()
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            SlideCollection col = null;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_SelectAll");
+                IDataReader reader = objData.ExecStoreToDataReader();
+                while (reader.Read())
+                {
+                    if (col == null) { col = new SlideCollection(); }
+                    Slide obj = new Slide();
+                    if (!Convert.IsDBNull(reader["ImagesID"])) obj.ImagesID = Convert.ToInt32(reader["ImagesID"]);
+                    if (!Convert.IsDBNull(reader["Title"])) obj.Title = Convert.ToString(reader["Title"]);
+                    if (!Convert.IsDBNull(reader["Images"])) obj.Images = Convert.ToString(reader["Images"]);
+                    if (!Convert.IsDBNull(reader["UserCreated"])) obj.UserCreated = Convert.ToString(reader["UserCreated"]);
+                    if (!Convert.IsDBNull(reader["IsDeleted"])) obj.IsDeleted = Convert.ToBoolean(reader["IsDeleted"]);
+                    if (!Convert.IsDBNull(reader["InputTime"])) obj.InputTime = Convert.ToDateTime(reader["InputTime"]);
+                    col.Add(obj);
+                }
+                reader.Close();
+                reader.Dispose();
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("GetAll() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return col;
+        }
+
+        public int CountImg(int AlbumID)
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            int objTemp = 0;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Image_Count_Img");
+                objData.AddParameter("@AlbumID", AlbumID);
+                objTemp = Convert.ToInt32(objData.ExecStoreToString());
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("Insert() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return objTemp;
+        }
+
+        public SlideCollection Getlist(string sTextSearch)
+        {
+            Data objData;
+            if (objDataAccess == null)
+                objData = new Data();
+            else
+                objData = objDataAccess;
+            SlideCollection col = null;
+            try
+            {
+                if (objData.GetConnection() == null || objData.GetConnection().State == ConnectionState.Closed)
+                    objData.Connect();
+                objData.CreateNewStoredProcedure("Slide_Getlist");
+                objData.AddParameter("@TextSearch", sTextSearch);
+                IDataReader reader = objData.ExecStoreToDataReader();
+                while (reader.Read())
+                {
+                    if (col == null) { col = new SlideCollection(); }
+                    Slide obj = new Slide();
+                    if (!Convert.IsDBNull(reader["ImagesID"])) obj.ImagesID = Convert.ToInt32(reader["ImagesID"]);
+                    if (!Convert.IsDBNull(reader["Title"])) obj.Title = Convert.ToString(reader["Title"]);
+                    if (!Convert.IsDBNull(reader["Images"])) obj.Images = Convert.ToString(reader["Images"]);
+                    if (!Convert.IsDBNull(reader["UserCreated"])) obj.UserCreated = Convert.ToString(reader["UserCreated"]);
+                    if (!Convert.IsDBNull(reader["IsDeleted"])) obj.IsDeleted = Convert.ToBoolean(reader["IsDeleted"]);
+                    if (!Convert.IsDBNull(reader["InputTime"])) obj.InputTime = Convert.ToDateTime(reader["InputTime"]);
+                    col.Add(obj);
+                }
+                reader.Close();
+                reader.Dispose();
+            }
+            catch (Exception objEx)
+            {
+                throw new Exception("Getlist() Error   " + objEx.Message.ToString());
+            }
+            finally
+            {
+                if (objDataAccess == null) { objData.DeConnect(); }
+            }
+            return col;
+        }
+
+
+        #endregion
+    }
+    public class SlideCollection : System.Collections.CollectionBase
+    {
+        public Slide this[int index]
+        {
+            get
+            {
+                return ((Slide)List[index]);
+            }
+            set
+            {
+                List[index] = value;
+            }
+        }
+        public int Add(Slide value)
+        {
+            return (List.Add(value));
+        }
+        public int IndexOf(Slide value)
+        {
+            return (List.IndexOf(value));
+        }
+        public void Insert(int index, Slide value)
+        {
+            List.Insert(index, value);
+        }
+        public void Remove(Slide value)
+        {
+            List.Remove(value);
+        }
+        public bool Contains(Slide value)
+        {
+            return (List.Contains(value));
+        }
+        protected override void OnValidate(Object value)
+        {
+            if (value.GetType() != typeof(Slide))
+                throw new ArgumentException("value must be of type DLLschool.category", "value");
+        }
+    }
+}

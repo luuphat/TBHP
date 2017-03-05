@@ -1,0 +1,101 @@
+﻿<%@ Control Language="VB" AutoEventWireup="false" CodeFile="wucnews.ascx.vb" Inherits="admin_control_wucnews" %>
+
+
+	<div class="maincontentinner">
+            	
+                <ul class="maintabmenu">
+                	<li class="current"><a href="dashboard.html">Danh sách tin tức</a></li>
+                </ul><!--maintabmenu-->
+                
+                <div class="content">
+                
+                <div class="contenttitle radiusbottom0">
+                	<h2 class="table"><span>Table with Options</span></h2>
+                </div><!--contenttitle-->
+                <div class="tableoptions">
+                	<button class="deletebutton radius3" title="table1">Delete Selected</button> &nbsp;
+                    <select class="radius3">
+                    	<option value="">Show All</option>
+                        <option value="">Rendering Engine</option>
+                        <option value="">Platform</option>
+                    </select> &nbsp;
+                    <button class="radius3">Apply Filter</button>
+                </div><!--tableoptions-->	
+                <table cellpadding="0" cellspacing="0" border="0" id="table1" class="stdtable stdtablecb">
+                    <colgroup>
+                        <col class="con0" />
+                        <col class="con1" />
+                        <col class="con0" />
+                        <col class="con1" />
+                        <col class="con0" />
+                        <col class="con1" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                        	<th class="head0"><input type="checkbox" class="checkall" /></th>
+                            <th class="head1">Rendering engine</th>
+                            <th class="head0">Browser</th>
+                            <th class="head1">Platform(s)</th>
+                            <th class="head0">Engine version</th>
+                            <th class="head1">CSS grade</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                        	<th class="head0"><input type="checkbox" class="checkall" /></th>
+                            <th class="head1">Rendering engine</th>
+                            <th class="head0">Browser</th>
+                            <th class="head1">Platform(s)</th>
+                            <th class="head0">Engine version</th>
+                            <th class="head1">CSS grade</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                        	<td class="center"><input type="checkbox" /></td>
+                            <td>Trident</td>
+                            <td>Internet Explorer 4.0</td>
+                            <td>Win 95+</td>
+                            <td class="center">4</td>
+                            <td class="center">X</td>
+                        </tr>
+                        <tr>
+                        	<td class="center"><input type="checkbox" /></td>
+                            <td>Trident</td>
+                            <td>Internet Explorer 5.0</td>
+                            <td>Win 95+</td>
+                            <td class="center">5</td>
+                            <td class="center">C</td>
+                        </tr>
+                        <tr>
+                        	<td class="center"><input type="checkbox" /></td>
+                            <td>Trident</td>
+                            <td>Internet  Explorer 5.5</td>
+                            <td>Win 95+</td>
+                            <td class="center">5.5</td>
+                            <td class="center">A</td>
+                        </tr>
+                        <tr>
+                        	<td class="center"><input type="checkbox" /></td>
+                            <td>Trident</td>
+                            <td>Internet Explorer 6</td>
+                            <td>Win 98+</td>
+                            <td class="center">6</td>
+                            <td class="center">A</td>
+                        </tr>
+                        <tr>
+                        	<td class="center"><input type="checkbox" /></td>
+                            <td>Trident</td>
+                            <td>Internet Explorer 7</td>
+                            <td>Win XP SP2+</td>
+                            <td class="center">7</td>
+                            <td class="center">A</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br clear="all" />
+                    
+                </div><!--content-->
+                
+            </div><!--maincontentinner-->

@@ -1,0 +1,216 @@
+﻿using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.Common;
+using tbhp.DataAccess;
+
+namespace tbhp.DataAccess
+{
+	public class Users
+	{
+		#region ***** Fields & Properties ***** 
+		private string _Username;
+		public string Username
+		{ 
+			get 
+			{ 
+				return _Username;
+			}
+			set 
+			{ 
+				_Username = value;
+			}
+		}
+		private string _Password;
+		public string Password
+		{ 
+			get 
+			{ 
+				return _Password;
+			}
+			set 
+			{ 
+				_Password = value;
+			}
+		}
+		#endregion
+
+		#region ***** Init Methods ***** 
+		public Users()
+		{
+		}
+		public Users(string username)
+		{
+			this.Username = username;
+		}
+		public Users(string username, string password)
+		{
+			this.Username = username;
+			this.Password = password;
+		}
+		#endregion
+
+		#region ***** Get Methods ***** 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Users Populate(IDataReader myReader)
+		{
+			Users obj = new Users();
+			obj.Username = (string) myReader["Username"];
+			obj.Password = (string) myReader["Password"];
+			return obj;
+		}
+
+		/// <summary>
+		/// Get Users by username
+		/// </summary>
+		/// <param name="username">Username</param>
+		/// <returns>Users</returns>
+		public Users GetByUsername(string username)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_GetByUsername", Data.CreateParameter("Username", username)))			{
+				if (reader.Read())
+				{
+					return Populate(reader);
+				}
+                reader.Close();
+                reader.Dispose();
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Get all of Users
+		/// </summary>
+		/// <returns>List<<Users>></returns>
+		public List<Users> GetList()
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_Get"))
+			{
+				List<Users> list = new List<Users>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Users
+		/// </summary>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSet()
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Users_Get");
+		}
+
+
+		/// <summary>
+		/// Get all of Users paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>List<<Users>></returns>
+		public List<Users> GetListPaged(int recperpage, int pageindex)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex)))
+			{
+				List<Users> list = new List<Users>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Users paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSetPaged(int recperpage, int pageindex)
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Users_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex));
+		}
+
+        public bool DangNhap(Users obj)
+        {
+            return Convert.ToBoolean(SqlHelper.ExecuteScalar(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_Login"
+                            , Data.CreateParameter("@Username", obj.Username)
+                            , Data.CreateParameter("@Password", obj.Password)));
+        }
+
+        public bool DoiMatKhau(Users obj, string passwordnew)
+        {
+            return Convert.ToBoolean(SqlHelper.ExecuteScalar(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_ChangePassword"
+                            , Data.CreateParameter("@Username", obj.Username)
+                            , Data.CreateParameter("@Password", obj.Password)
+                            , Data.CreateParameter("@PasswordNew", passwordnew)));
+        }
+        public bool ResetPassword(string username, string password)
+        {
+            return Convert.ToBoolean(SqlHelper.ExecuteScalar(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Users_ResetPassword"
+                            , Data.CreateParameter("@Username", username)
+                            , Data.CreateParameter("@Password", password)));
+        }
+
+
+		#endregion
+
+		#region ***** Add Update Delete Methods ***** 
+		/// <summary>
+		/// Add a new Users within Users database table
+		/// </summary>
+		/// <param name="obj">Users</param>
+		/// <returns>key of table</returns>
+		public int Add(Users obj)
+		{
+			DbParameter parameterItemID = Data.CreateParameter("Username", obj.Username);
+			parameterItemID.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Users_Add"
+							,parameterItemID
+							,Data.CreateParameter("Password", obj.Password)
+			);
+			return 0;
+		}
+
+		/// <summary>
+		/// updates the specified Users
+		/// </summary>
+		/// <param name="obj">Users</param>
+		/// <returns></returns>
+		public void Update(Users obj)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Users_Update"
+							,Data.CreateParameter("Username", obj.Username)
+							,Data.CreateParameter("Password", obj.Password)
+			);
+		}
+
+		/// <summary>
+		/// Delete the specified Users
+		/// </summary>
+		/// <param name="username">Username</param>
+		/// <returns></returns>
+		public void Delete(string username)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Users_Delete", Data.CreateParameter("Username", username));
+		}
+		#endregion
+	}
+}

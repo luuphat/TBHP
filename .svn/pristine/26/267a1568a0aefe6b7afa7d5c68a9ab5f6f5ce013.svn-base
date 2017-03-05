@@ -1,0 +1,194 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Libs;
+using DLLFuniture;
+
+public partial class General_wucContent : System.Web.UI.UserControl
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            LoadParent();
+            LoadSlide();
+        }
+    }
+    private SlideCollection LoadSlide()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        SlideCollection col = new SlideCollection();
+        try
+        {
+            Slide obj = new Slide();
+            obj.DataObject = objdata;
+            col = obj.GetAll();
+            if (col != null)
+            {
+                rptslide.DataSource = col;
+                rptslide.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadProduct()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+        return col;
+
+    }
+
+    //private void LoadTypeName()
+    //{
+    //    Data objdata = new Data(Global.ConnectionSql);
+    //    try
+    //    {
+
+    //        Types obj = new Types();
+    //        obj.DataObject = objdata;
+    //        TypesCollection col = obj.Getlist(string.Empty);
+    //        if (col != null)
+    //        {
+    //            rptDataTypes.DataSource = col;
+    //            rptDataTypes.DataBind();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Global.WriteLogError("LoadTypeName home(): " + ex);
+    //    }
+    //    finally {
+    //        objdata.DeConnect();
+    //    }
+    //}
+
+    //protected void rptDataTypes_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    //{
+    //   //get data 
+    //    if (e.Item.ItemIndex < 0) { return; }
+    //    Types type = (Types)e.Item.DataItem;
+    //    int typeid = Convert.ToInt32(type.TypeID);
+    //    Repeater rptcategory = (Repeater)e.Item.FindControl("rptDataCategory");
+    //    LoadCategorybyTypeID(typeid, rptcategory);
+    //}
+
+    //private void LoadCategorybyTypeID(int typeID, Repeater rpt)
+    //{
+
+    //    Data objdata = new Data(Global.ConnectionSql);
+    //    try
+    //    {
+    //        Products obj = new Products();
+    //        obj.DataObject = objdata;
+    //        ProductsCollection col = obj.GetListByTypeID(typeID);
+    //        if (col != null)
+    //        {
+    //            rpt.DataSource = col;
+    //            rpt.DataBind();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Global.WriteLogError("LoadData home(): " + ex);
+    //    }
+    //    finally {
+    //        objdata.DeConnect();
+    //    }
+    //}
+
+
+    private void LoadParent()
+    {
+        Libs.Data objdata = new Libs.Data(Global.ConnectionSql);
+        try
+        {
+            Category objsubject = new Category();
+            objsubject.DataObject = objdata;
+            CategoryCollection colparent = objsubject.GetlistParent();
+            if (colparent == null) { return; }
+            rptParent.DataSource = colparent;
+            rptParent.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadParent() " + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+    protected void rptParent_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        //get data
+
+        if (e.Item.ItemIndex < 0) { return; }
+        Category source = (Category)e.Item.DataItem;
+        int iParentID = Convert.ToInt32(source.CategoryID);
+        Repeater rptsub = (Repeater)e.Item.FindControl("rptsub");
+        LoadCategoryNamebyParentID(rptsub, iParentID);
+    }
+
+    private void LoadCategoryNamebyParentID(Repeater rpt, int parentid)
+    {
+        Libs.Data objdata = new Libs.Data(Global.ConnectionSql);
+        try
+        {
+            Category obj = new Category();
+            obj.DataObject = objdata;
+            CategoryCollection col = obj.Getlist(parentid);
+            if (col == null) { return; }
+            rpt.DataSource = col;
+            rpt.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadCategoryNamebyParentID()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+
+    protected void rptsub_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        //get data
+
+        if (e.Item.ItemIndex < 0) { return; }
+        Category source = (Category)e.Item.DataItem;
+        int categoryID = Convert.ToInt32(source.CategoryID);
+        Repeater rptimg = (Repeater)e.Item.FindControl("rptimgproduct");
+        LoadProductbyCategory(rptimg, categoryID);
+    }
+    private void LoadProductbyCategory(Repeater rpt, int categoryID)
+    {
+        Libs.Data objdata = new Libs.Data(Global.ConnectionSql);
+        try
+        {
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            ProductsCollection col = obj.GetListImagesProduct(categoryID);
+            if (col == null) { return; }
+            rpt.DataSource = col;
+            rpt.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadProductbyCategory()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+}

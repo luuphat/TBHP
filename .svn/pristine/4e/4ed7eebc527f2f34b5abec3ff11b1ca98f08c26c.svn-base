@@ -1,0 +1,192 @@
+﻿using DLLFuniture;
+using Libs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class admin_control_wucproduct_add : System.Web.UI.UserControl
+{
+    public int CategoryID
+    {
+        get
+        {
+            object obj = ViewState["CategoryID"];
+            return ((obj == null) ? -1 : Convert.ToInt32(ViewState["CategoryID"]));
+        }
+        set { ViewState["CategoryID"] = value; }
+    }
+
+    public int NewsID
+    {
+        get
+        {
+            object obj = ViewState["NewsID"];
+            return ((obj == null) ? -1 : Convert.ToInt32(ViewState["NewsID"]));
+        }
+        set { ViewState["NewsID"] = value; }
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            LoadDDL();
+            IniInsert();
+        }
+        //Đăng ký control cho file upload
+        ScriptManager scriptManager = ScriptManager.GetCurrent(this.Page);
+        scriptManager.RegisterPostBackControl(btnOk);
+    }
+
+    private void IniInsert()
+    {
+        txtTitle.Text = string.Empty;        
+        radContents.Content = string.Empty;
+        txtDescription.Text = string.Empty;
+        cbkMostSale.Checked = false;
+        LoadDDL();
+        lblHandleTitle.Text = "Thêm mới sản phẩm";
+        lblMessage.Text = string.Empty;
+       
+    }
+
+    private void Insert()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            obj.Title = txtTitle.Text.Trim();
+            obj.ProductCode = txtProductCode.Text.Trim().ToUpper();
+            obj.Description = txtDescription.Text.Trim();
+            obj.Detail = radContents.Content;
+            obj.IsActived = true;
+            obj.IsMostSale = cbkMostSale.Checked;
+            obj.Links =Global.FilterFileName(txtTitle.Text.Trim()).Replace(" ", "-");
+            obj.CategoryID = Convert.ToInt32(ddlCategory.SelectedValue);
+            if (this.uplImage.HasFile)
+            {
+                Neodynamic.WebControls.ImageDraw.ImageElement uploadedImage;
+                uploadedImage = Neodynamic.WebControls.ImageDraw.ImageElement.FromBinary(this.uplImage.FileBytes);
+                Neodynamic.WebControls.ImageDraw.Resize actResize = new Neodynamic.WebControls.ImageDraw.Resize();
+                actResize.Width = 150;
+                actResize.Height = 150;
+                uploadedImage.Actions.Add(actResize);
+                Neodynamic.WebControls.ImageDraw.ImageDraw imgDraw = new Neodynamic.WebControls.ImageDraw.ImageDraw();
+                imgDraw.Elements.Add(uploadedImage);
+                imgDraw.ImageFormat = Neodynamic.WebControls.ImageDraw.ImageDrawFormat.Jpeg;
+                imgDraw.JpegCompressionLevel = 90;
+                string filename = GetDate + "_" + uplImage.FileName;
+                imgDraw.Save(Server.MapPath(Global.GetConfigKey("uploadproduct") + filename));
+                obj.Image = Global.GetConfigKey("uploadproduct") + filename;
+            }
+            else
+            {
+                obj.Image = Global.GetConfigKey("uploadproduct") + "alternate.png";
+            }
+            obj.Date = DateTime.Now;
+            int result = Convert.ToInt32(obj.Add());
+            if (result > 0)// no error
+            {
+                Response.Write("<script>window.location='product.aspx'</script>");
+            }
+            else if (result == 0)
+            {
+                lblMessage.Text = "Trùng dữ liệu vui lòng kiểm tra lại";
+                return;
+            }
+            else
+            {
+                lblMessage.Text = "Lỗi xảy ra trong quá trình lưu dữ liệu. Liên hệ với người quản trị để khắc phục";
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("Insert() " + ex);
+
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+    private void LoadDDL()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+
+            Category objcategory = new Category();
+            objcategory.DataObject = objdata;
+            ddlCategory.Items.Clear();
+            //ddlCategory.Items.Insert(0, new ListItem("------[Tất cả]-----", "-1"));
+            CategoryCollection col = objcategory.GetAll(string.Empty,-1);
+            if (col == null) { return; }
+            int baseID = 0;
+            foreach (Category category in col)
+            {
+                if (category.ParentID < baseID)
+                {
+                    baseID = category.ParentID;
+                }
+            }
+            foreach (Category category in col)
+            {
+                if (category.ParentID == baseID)
+                {
+                    ddlCategory.Items.Add(new ListItem(category.CategoryName, category.CategoryID.ToString()));
+                    AddChildrenHandle(category.CategoryID, col);
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("Update () " + ex);
+
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+    private void AddChildrenHandle(int ParentID, CategoryCollection col)
+    {
+        // recursive tree loader. Passes back in a node to retireve its childre until there are no more children for this node.
+        foreach (Category category in col)                     // locate all children of this category
+        {
+            if (category.ParentID == ParentID)                 // found a child
+            {
+                string sTab = "....";
+                ddlCategory.Items.Add(new ListItem(sTab + category.CategoryName, category.CategoryID.ToString()));
+                AddChildrenHandle(category.CategoryID, col);                     // find this child's children
+            }
+        }
+    }
+
+    protected void btnOk_Click(object sender, EventArgs e)
+    {
+        Insert();
+    }
+
+    string GetDate
+    {
+        get
+        {
+            return DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+        }
+    }
+
+    protected void btnReset_Click(object sender, EventArgs e)
+    {
+        Response.Write("<script>window.location='product.aspx'</script>");
+    }
+}

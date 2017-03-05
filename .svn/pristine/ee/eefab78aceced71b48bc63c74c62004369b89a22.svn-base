@@ -1,0 +1,303 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="wucproduct.ascx.cs" Inherits="admin_control_wucproduct" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+
+<style>
+ 
+.popupSlide {width:400px; height:260px; border:1px solid #ccc;background-color:#fff; box-shadow:10px 10px inset;box-shadow:1px 1px 5px #dddddd;
+}
+ .popupSlide .headerpopup {width :95%; border-bottom:1px solid #ddd;padding:10px;height:20px; float:left;}
+        .popupSlide .headerpopup .titlepopup {
+            font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;font-weight:bold;padding:5px;width:50%;float:left;
+        }
+        .popupSlide .headerpopup .btnclose {
+            float:right;width:10%;
+        }
+            .popupSlide .headerpopup .btnclose img {border:none;
+            }
+    .popupSlide .contentpopup {
+        float:left;padding:10px;font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;line-height:10px;width:95%;height:200px;overflow:scroll;
+    }
+        .popupSlide .contentpopup .tdpopup {
+            width:20%;
+        }
+        .popupSlide .contentpopup .td1popup {
+           width:70%;
+        }
+             
+/*   button */
+.btnAdd { width:100px;float:right;padding:0px 5px 0px 5px;margin:0px 10px 0px 0px;}
+
+    .btn:hover {cursor:pointer;color :#5c677c;
+    }
+
+.btnOk {
+   float:left; border:1px solid #ccc;background-color:none;background-image: url(../images/titlem.png);width:80px;background-repeat: repeat-x;cursor:pointer;font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;font-weight:bold;height:20px;margin-top:20px;
+   font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;
+}
+    .btnOk:hover {
+        background-color:#f2f2f2;cursor:pointer;
+    }
+.btnOk img{
+    border:none;cursor:pointer;padding-top:3px;padding-left:3px;
+}
+.btnCencal {
+   float:left; border:1px solid #ccc;background-color:none;background-image: url(../images/titlem.png);width:80px;background-repeat: repeat-x;cursor:pointer;font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;font-weight:bold;height:20px;margin-left:5px;margin-top:20px;
+   font-size:12px;font-family: "CenturyGothicRegular", "Century Gothic", Arial, Helvetica, sans-serif;
+}
+    .btnCencal:hover {
+        background-color:#f2f2f2;cursor:pointer;
+    }
+.btnCencal img{
+    border:none;cursor:pointer;padding-top:3px;height:16px;padding-left:3px;
+}
+
+.btndefault {
+   border:none;background:none;float:right;cursor:pointer;
+}
+
+
+
+/* modal popup */
+.modalBackground
+{
+	z-index:1000 !important;
+	background: black;
+	filter:alpha(opacity=20);
+	opacity: .20;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)"; 
+}
+.modalPopup
+{
+	background:#FFFFFF;
+	z-index:1001 !important;
+}
+
+</style>
+
+  <div class="maincontent noright">
+<div class="maincontentinner">
+
+    <ul class="maintabmenu">
+        <li class="current"><a href="dashboard.html">Danh sách sản phẩm</a></li>
+    </ul>
+    <!--maintabmenu-->
+    <asp:UpdatePanel ID="upList" runat="server">
+        <ContentTemplate>
+
+      
+    <div class="content">
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="table"><span>&nbsp;</span></h2>
+        </div>
+        <!--contenttitle-->
+        <div class="tableoptions">
+            <table  style="width:100%;">
+                <tr>
+                    <td style="width:7%;float:left;"><label>Chuỗi tìm</label></td>
+                    <td style="width:15%;float:left;">
+                        <span >
+                            <asp:TextBox ID="txtSearch" runat="server" CssClass="text1" Width="100%"></asp:TextBox>
+                        </span>
+                    </td>
+                     <td style="width:15%;float:left;margin-left:10px;font-size:12px;">
+                        <span >
+                             <asp:DropDownList ID="ddlCategory" Width="100%" runat="server" class="dualselect "></asp:DropDownList>
+                        </span>
+                    </td>
+                     <td style="width:7%;float:left;margin-left:10px;margin-bottom:10px;">
+                         <asp:Button ID="btnSearch" runat="server" Text="Tìm kiếm" OnClick="btnSearch_Click" CssClass="btn" />                      
+                    </td>
+                     <td style="width:10%;float:left;margin-left:10px;;margin-bottom:10px;">
+                         <asp:Button ID="btnAdd" runat="server" Text="Thêm mới" OnClick="btnAdd_Click" CssClass="btn" />                      
+                    </td>
+                    <td style="float:left;padding-left:50px; padding-bottom:10px; font-size:12px;">
+                        Tổng cộng: <asp:Label ID="lblcount" runat="server" ForeColor="Red" ></asp:Label>
+                    </td>
+                    <td style="width:10%;float:right;padding-right:10px; padding-bottom:10px;">
+                         &nbsp;
+                    <asp:DropDownList ID="ddlPageSize" runat="server">
+                        <asp:ListItem Text="10" Value="10"></asp:ListItem>
+                        <asp:ListItem Text="20" Value="20"></asp:ListItem>
+                        <asp:ListItem Text="50" Value="50"></asp:ListItem>
+                    </asp:DropDownList>
+                &nbsp;
+                    </td >
+                   <td style="margin-right:5px;float:right; padding-bottom:10px;">  <webdiyer:AspNetPager ID="anpPager"   runat="server" PagingButtonSpacing="5px" 
+                                                    PagingButtonType="text" CssClass="pager pagging" CurrentPageButtonClass="currentStyle fllf" PrevNextButtonsClass="prevNextStyle fllf" PrevPageText="<" PagingButtonsClass="indexStyle fllf" NextPageText=">" ShowPageIndexBox="Never" NumericButtonCount="5">
+                                                </webdiyer:AspNetPager>
+                   </td>
+                </tr>
+            </table>
+        </div>
+        <!--tableoptions-->
+        <table cellpadding="0" cellspacing="0" border="0" id="table1" class="stdtable stdtablecb">
+            <colgroup>
+                <col class="con0" />
+                <col class="con1" />
+                <col class="con0" />
+                <col class="con1" />
+                <col class="con0" />
+                  <col class="con0" />
+                <col class="con1" />
+                <col class="con0" />
+                <col class="con1" />
+                <col class="con0" />
+                 <col class="con1" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="head0">
+                         <input type="checkbox"  id="checkboxAll" onclick="javascript: selectAll(this)"  /></th>
+                    <th class="head1">ID</th>
+                    <th class="head1">Ảnh</th>
+                    <th class="head0">Tiêu đề</th>
+                     <th class="head1">Mã Code</th>
+                    <th class="head1">Kích hoạt</th>
+                     <th class="head0">Ngày đăng </th>     
+                    <th class="head1">Lượt xem</th>                                  
+                    <th class="head1">#</th>             
+                    <th class="head1">Đăng ảnh slide</th> 
+                    <th class="head1">Xem Slide</th>     
+                </tr>
+            </thead>
+       
+            <tbody>
+                <asp:Repeater ID="rptData" runat="server"  OnItemDataBound="rptData_ItemDataBound" OnItemCommand="rptData_ItemCommand">
+                    <ItemTemplate>
+                        <tr>
+                            <td class="center">
+                                  <input type="checkbox" id="cbxcheck" runat="server" class="selectInstance" /></td>
+                            <td><a href="../admin/product_edit.aspx?pid=<%# Eval("NewsID") %>"> <%#Eval("NewsID") %> </a></td>
+                            <td><img height="100" width="120" src='<% = Global.Root %><%#Eval("Image") %> '/>  </td>
+                            <td><a href="../admin/product_edit.aspx?pid=<%# Eval("NewsID") %>"><%#Eval("Title") %> </a></td> 
+                            <td><%#Eval("ProductCode") %> </td>                      
+                            <td class="center"><asp:ImageButton ID="ibtIsActived" runat="server" CommandName="DoSetActive" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "NewsID") %>'/></td>
+                            <td class="center"><%#Convert.ToDateTime(Eval("Date")).ToString("dd/MM/yyyy") %></td>
+                             <td class="center"><%#Eval("countviews") %> </td>
+                            <td> <asp:ImageButton ID="btnDelete" CausesValidation="false" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "NewsID") %>' CommandName="Delete" OnClientClick="return confirm('Bạn có chắc muốn xóa?');"
+                            runat="server" ToolTip="Xóa"></asp:ImageButton>
+                            </td>
+                            <td>
+                                 <asp:ImageButton ID="ibtslide" CausesValidation="false" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "NewsID") %>' CommandName="DoSlide" runat="server" ToolTip="Ảnh slide"></asp:ImageButton>
+                            </td>
+                             <td>
+                                <a href="../admin/slide.aspx?pid=<%# Eval("NewsID") %>&n=<%#Eval("Title") %>"> <img height="16" width="16" src="../../images/view.png" title="Xem Slide" /> </a>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                </asp:Repeater>
+              
+             
+            </tbody>
+        </table>
+
+        <br clear="all" />
+
+    </div>
+    <!--content-->
+      </ContentTemplate>
+    </asp:UpdatePanel>
+</div>
+</div>
+<!--maincontentinner-->
+<script type="text/javascript">
+    function selectAll(target) {
+        var items = $('.selectInstance');
+        for (i = 0; i < items.length; i++) {
+            items[i].checked = target.checked;
+        }
+    }
+    function iniUpdate() {
+        var hasObject = false;
+        var items = $('.selectInstance');
+        for (i = 0; i < items.length; i++) {
+            if (items[i].checked) {
+                hasObject = true;
+                break;
+            }
+        }
+        if (!hasObject) { alert("Chưa chọn đối tượng cần cập nhật !"); }
+        return hasObject;
+    }
+
+    function iniDelete() {
+        var items = $('.selectInstance');
+        //   var dvdelete = $('#dvdeleted');
+        for (i = 0; i < items.length; i++) {
+            if (items[i].checked) {
+
+                $("#dvfade").addClass('fade');
+                $("#dvdeleted").removeClass('None');
+                $('#dvdeleted').show();
+                return;
+            }
+        }
+        alert("Chưa chọn đối tượng nào để xóa !");
+
+    }
+
+    function UniniDelete() {
+        $("#dvfade").removeClass('fade');
+        $("#dvdeleted").addClass('None');
+        $('#dvdeleted').hide();
+    }
+
+</script>
+
+
+ <div id="dvUpload" runat="server" />
+    <cc1:ModalPopupExtender ID="mpUpload" runat="server" TargetControlID="dvUpload"  DropShadow="false" RepositionMode="RepositionOnWindowResizeAndScroll" CancelControlID="btnCloseUpload"  PopupControlID="pUpload" BackgroundCssClass="modalBackground" />
+            <asp:Panel ID="pUpload" runat="server" Height="300px">
+               <div class="popupSlide">
+                   <div class="headerpopup"> <div class="titlepopup">Upload silde ảnh </div><div class="btnclose"><img src="../../images/close1.gif" align="right" /> </div></div>
+                   <div class="contentpopup">
+                       <table style="width:100%;">                           
+                           <tr>
+                               <td></td>
+                               <td class="td1">
+                                   <div id="fileUploadarea">
+                                       <asp:FileUpload ID="FileUpload1" runat="server" BorderStyle="Solid" BorderColor="Gray" /><br />
+                                   </div>
+                                   &nbsp;
+                                        <div>
+                                                <input style="display: block;" id="btnAddMoreImages" type="button" value="Thêm ảnh" onclick="AddMoreImages();" />
+                                       </div>
+                               </td>
+                           </tr>
+                           <tr>
+                               <td class="tdpopup"></td>
+                               <td class="td1popup"><div class="btnOk"><img src="../../images/add.png" align="left"/><asp:Button ID="btnUpload" Text="Upload" runat="server" CssClass="btndefault" OnClick="btnUpload_Click" /></div><div class="btnCencal"> <img src="../../images/quit.png" align="left"/><asp:Button ID="btnCloseUpload" runat="server" Text="Bỏ qua" CssClass="btndefault"  /></div> </td>
+                           </tr>
+                       </table>
+                   </div>
+               </div>
+            </asp:Panel>
+ <script language="javascript" type="text/javascript">
+     function AddMoreImages() {
+
+         if (!document.getElementById && !document.createElement)
+             return false;
+         var fileUploadarea = document.getElementById("fileUploadarea");
+         if (!fileUploadarea)
+             return false;
+         var newLine = document.createElement("br");
+         fileUploadarea.appendChild(newLine);
+         var newFile = document.createElement("input");
+         newFile.type = "file";
+         newFile.setAttribute("class", "fileUpload");
+         if (!AddMoreImages.lastAssignedId)
+             AddMoreImages.lastAssignedId = 100;
+         newFile.setAttribute("id", "FileUpload" + AddMoreImages.lastAssignedId);
+         newFile.setAttribute("name", "FileUpload" + AddMoreImages.lastAssignedId);
+         var div = document.createElement("div");
+         div.appendChild(newFile);
+         div.setAttribute("id", "div" + AddMoreImages.lastAssignedId);
+         fileUploadarea.appendChild(div);
+         AddMoreImages.lastAssignedId++;
+     }
+    </script>

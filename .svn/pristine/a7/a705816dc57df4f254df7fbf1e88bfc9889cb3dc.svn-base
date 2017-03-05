@@ -1,0 +1,186 @@
+@charset "utf-8";
+/* CSS Document */
+body{ margin:0; padding:0; font-family: Arial, Helvetica, sans-serif; color:#444;  font-size:12px; background:url(../images/parttern.jpg)}
+img{ border:none; text-decoration:none}
+img:hover{ border:none}
+a{ text-decoration:none;color:#015fb6;}
+a:hover{ text-decoration:none}
+#page{ width:1000px; margin:0 auto}; 
+#header { width:100%; float:left; height:205px}
+.nav{ width:100%; float:left; height:172px; background:url(../images/bg_top.jpg) no-repeat; position:relative}
+.logo{ width:200px; position:absolute; top:-30px; left:20px}
+.menu{ width:100%; float:left; text-align:right}
+.menu ul li{ display:inline; padding:0 5px}
+.menu ul li a{ color:#333; text-decoration:none}
+.menu ul li a:hover{ color:#0062b8; text-decoration:none}
+
+/*---------menu-bar-------*/
+#menu-bar {
+LINE-HEIGHT: normal; bottom:-13px; position:absolute;
+	FLOAT: left; background: url(../images/bg_maintab.png) no-repeat;
+	font-size: 100%;
+	font-weight:bold;	
+	width:100%;
+
+}
+
+#menu-bar A:hover {
+	color:#ffffff;	DISPLAY: block;
+	BACKGROUND: url(../images/menu_left.png) no-repeat left top;
+}
+
+#menu-bar A:hover SPAN {
+	COLOR: #ffffff;DISPLAY: block;
+	BACKGROUND: url(../images/menu_right.png) no-repeat right top; line-height:51px;
+}
+#menu-bar .current A {
+	BACKGROUND: url(../images/menu_left.png) no-repeat left top;line-height:51px; display:block;
+}
+#menu-bar .current A SPAN {DISPLAY: block; 
+	BACKGROUND: url(../images/menu_right.png) no-repeat right top;line-height:51px;
+	color:#ffffff;
+}
+
+#menu-bar li {
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;DISPLAY: inline; text-transform:uppercase; 
+
+  float: left;
+  position: relative; z-index:1000;
+  list-style: none;
+}
+
+#menu-bar a {
+ 
+  font-size: 12px;FLOAT: left; line-height:55px;
+  color: #3791d1;
+  text-decoration: none;
+  display: block;
+ MARGIN: 0px 0px 0px 0px;
+	PADDING-LEFT: 14px;
+ 
+}
+#menu-bar A SPAN {
+	DISPLAY: block;
+	FLOAT: left;
+	COLOR: #fff;text-shadow:-1px 1px #000;
+	FLOAT: none;
+	PADDING-RIGHT:14px;padding-bottom:10px;
+}
+ #menu-bar li:hover > a {
+BACKGROUND: url(../images/menu_left.png) no-repeat left top;line-height:51px; display:block; margin:0;
+
+}
+ #menu-bar li:hover > a span {
+BACKGROUND: url(../images/menu_right.png) no-repeat right top;line-height:51px;margin:0;
+	color:#ffffff;
+
+}
+#menu-bar ul li:hover a, #menu-bar li:hover li a {
+  background: none;
+  border: none; padding:4px 10px 4px 10px!important; line-height:18px; font-weight:normal; margin:0 0px;
+  color:#fff !important;width:180px; text-align:left; text-decoration:none; text-transform:none;border-bottom:1px  dotted #ccc; text-transform:none;
+  
+  -box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+#menu-bar ul li:hover a, #menu-bar li:hover li a:hover{ background:#0262b6; width:179px}
+
+#menu-bar ul{
+  background: #40bfea;    
+  display: none;
+  margin: 0;
+  padding: 0; z-index:2;
+  width: 200px;
+  position: absolute;
+  top: 51px; left:6px;
+
+}
+#menu-bar li:hover > ul {
+  display: block;
+}
+#menu-bar ul li ul li {
+  float: none; 
+  margin: 0;
+  padding: 0;
+}
+#menu-bar ul li ul li a {
+  padding:4px 10px 4px 10px!important; line-height:18px; font-weight:normal;
+  color:#444 !important;width:180px; text-align:left;  text-transform:none;border-bottom:1px solid #ccc;
+ 
+}
+#menu-bar ul li:first-child > a {
+  
+}
+#menu-bar ul li:last-child > a {
+ 
+}
+#menu-bar:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+#menu-bar {
+  display: inline-block; margin:0; padding:0 0 0 15px
+}
+  html[xmlns] #menu-bar {
+  display: block;
+}
+
+.slide{ width:970px; float:left; padding:10px 15px; background:#fff; margin:8px 0; box-shadow:1px 1px 1px #ccc}
+.divcontent{ width:100%; float:left; background:#FFF}
+h1{ background:url(../images/bg_title.png) no-repeat left; height:46px; line-height:46px; font-size:18px; font-weight:normal; text-transform:uppercase; width:95%; float:left; margin:5px 0 0 -4px; color:#015fb6;padding:0 0 0 40px}
+h1 a{ color:#015fb6; text-decoration:none}
+h1 a:hover{ color:#000; text-decoration:none}
+#content {width:660px; float: left; padding:0 0 0 15px; background:#FFF; margin:10px 0}
+.news{ width:100%; float:left; margin-bottom:15px; box-shadow:1px 1px 5px #888}
+.ctnews{ padding:10px; min-height:160px}
+.ctnews p{ padding:3px 0; margin:0}
+.titlenews{ font-size:16px; font-weight:bold; color:#424246}
+.titlenews a{  color:#424246; text-decoration:none}
+.titlenews a:hover{  color:#000;text-decoration:none}
+.date{ color:#9f9f9f; font-style:italic}
+.ctnews img{ width:190px; margin-right:10px; -moz-box-shadow: 1px 1px 3px #888;
+-webkit-box-shadow: 1px 1px 3px #888;
+box-shadow: 1px 1px 3px #888;}
+.newsrelated{ width:100%; float:left}
+.newsrelated ul{ margin:10px 0 0 10px; padding:0}
+.newsrelated li{ background:url(../images/arr.png) no-repeat; list-style:none; padding:0px 0 10px 20px; margin:0; color:#015fb6; text-decoration:none}
+.newsrelated li a{  color:#015fb6; text-decoration:none}
+.newsrelated li a:hover{  color:#444; text-decoration:none}
+.paddr{ padding:0 10px 0 0}
+a.more { background:#39b8e7; color:#FFF; padding:5px 10px;  border-radius:8px; text-decoration:none}
+a.more:hover{ background:#0062b8; color:#FFF; padding:5px 10px;  border-radius:8px; text-decoration:none}
+
+#right {width: 300px; float: right; padding-right:15px; margin-top:10px}
+.right_row{ width:100%; float: left; margin-bottom:10px}
+h2{ height:42px; line-height:42px; text-transform:uppercase; font-weight:normal; background: url(../images/title_right.png) no-repeat ; width:100%; float:left; margin:0; padding:0}
+h2 a{ color:#fff; font-size:18px; text-decoration:none; padding-left:25px; text-shadow:-1px 1px #000}
+h2 a:hover{ color:#fff; font-size:18px; text-decoration:none;text-shadow:-1px 1px #333}
+.ct_right{ background:#e3e3e3; width:260px; float:left; padding:10px 20px }
+.videosub img{ width:78px; height:65px; margin-right:2px; border:1px solid #ccc; padding:1px}
+
+.ct_right_picture{ background:#e3e3e3; width:280px; float:left; padding:10px 10px }
+.picturesub{ width:82px; float:left; height:90px; overflow:hidden; margin:5px}
+.picturesub img{ width:78px; height:65px; box-shadow:1px 1px 5px #ccc; border:2px solid #fff}
+.picturesub img:hover{opacity:0.8;
+filter:alpha(opacity=80);}
+.name{ padding:0; margin:0; height:20px; overflow:hidden; text-align:center; margin-top:6px}
+
+.tf_letter{ width:210px; padding:5px; border:1px solid #909090; color:#666}
+.bt_lefter{ background:#909090; color:#fff; border:none; padding:5px 10px; cursor:hand; cursor:pointer; font-weight:bold}
+.bt_lefter:hover{ color:#333}
+.advright{ width:100%; float:left} 
+.advright img{ width:300px; margin-bottom:3px}
+#footer {width:100%; float:left;background:#FFFFFF; position:relative; padding-bottom:10px }
+.bg_pencil{  position:absolute; top:-20px; left:20px}
+.ct_footer{ text-align:center; padding:20px 0; width:100%; float:left;}
+.menubt{ width:100%; float:left; text-align:center; height:39px;background:url(../images/bg_menufooter.jpg) no-repeat center}
+.menubt ul li{ display:inline; padding:0 3px; color:#FFFFFF}
+.menubt ul li a{ color:#fff; text-decoration:none}
+.menubt ul li a:hover{ color:#0062b8; text-decoration:none}
+

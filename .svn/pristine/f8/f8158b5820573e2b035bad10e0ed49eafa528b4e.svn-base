@@ -1,0 +1,20 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="wucmenu.ascx.cs" Inherits="admin_general_wucmenu" %>
+
+ <div class="mainleft">
+          	<div class="mainleftinner">
+            
+              	<div class="leftmenu">
+            		<ul>
+                        <li><a href="#" class="tables"><span>Danh mục</span></a></li>
+                    	<li><a href="#" class="dashboard"><span>Sản phẩm</span></a></li>
+                        <li><a href="../admin/news.aspx" class="widgets"><span>Tin tức</span></a></li>
+                        <li><a href="#" class="elements"><span>Giới thiệu</span></a></li>
+                        <li><a href="#" class="charts"><span>Cấu hình chung</span></a></li>
+                        <li><a href="#" class="grid"><span>User</span></a></li>
+                        <li><a href="#" class="calendar"><span>Calendar</span></a></li>
+                    </ul>
+                        
+                </div><!--leftmenu-->
+            	<div id="togglemenuleft"><a></a></div>
+            </div><!--mainleftinner-->
+        </div><!--mainleft-->

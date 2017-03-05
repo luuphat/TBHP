@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Libs;
+using DLLFuniture;
+
+public partial class Web_Introduct : System.Web.UI.Page
+{
+    protected string _content = string.Empty;
+    protected string _title = string.Empty;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            this.GetIntroduct("gioi-thieu");
+        }        
+    }
+    private void GetIntroduct(string ID)
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+            ct obj = new ct();
+            obj.DataObject = objdata;
+            obj.GetByID(ID);
+            _content = obj.Detail;
+            _title = obj.Title;
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("GetIntroduct ()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+}

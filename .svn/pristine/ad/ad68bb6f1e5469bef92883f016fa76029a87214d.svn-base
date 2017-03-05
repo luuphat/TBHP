@@ -1,0 +1,1 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="wuccreate_edit.ascx.cs" Inherits="admin_control_wuccreate_edit" %>

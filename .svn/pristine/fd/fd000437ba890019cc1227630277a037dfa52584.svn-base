@@ -1,0 +1,17 @@
+﻿body 
+{
+	/*background-color:White;*/
+}
+.LinkStyle
+{
+	font-size:12px;
+	font-style:normal;
+	color:#65bbf4;
+}
+.LinkStyle:hover
+{
+	font-size:12px;
+	font-style:normal;
+	color:#65bbf4;
+	text-decoration:underline;
+}

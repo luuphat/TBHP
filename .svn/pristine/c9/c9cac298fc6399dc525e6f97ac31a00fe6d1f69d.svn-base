@@ -1,0 +1,281 @@
+﻿using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.Common;
+using tbhp.DataAccess;
+
+namespace tbhp.DataAccess
+{
+	public class Categories
+	{
+		#region ***** Fields & Properties ***** 
+		private int _CategoryID;
+		public int CategoryID
+		{ 
+			get 
+			{ 
+				return _CategoryID;
+			}
+			set 
+			{ 
+				_CategoryID = value;
+			}
+		}
+		private string _CategoryName;
+		public string CategoryName
+		{ 
+			get 
+			{ 
+				return _CategoryName;
+			}
+			set 
+			{ 
+				_CategoryName = value;
+			}
+		}
+		private int _TypeID;
+		public int TypeID
+		{ 
+			get 
+			{ 
+				return _TypeID;
+			}
+			set 
+			{ 
+				_TypeID = value;
+			}
+		}
+		private string _Link;
+		public string Link
+		{ 
+			get 
+			{ 
+				return _Link;
+			}
+			set 
+			{ 
+				_Link = value;
+			}
+		}
+		private bool _Status;
+		public bool Status
+		{ 
+			get 
+			{ 
+				return _Status;
+			}
+			set 
+			{ 
+				_Status = value;
+			}
+		}
+		private int _Sort;
+		public int Sort
+		{ 
+			get 
+			{ 
+				return _Sort;
+			}
+			set 
+			{ 
+				_Sort = value;
+			}
+		}
+		#endregion
+
+		#region ***** Init Methods ***** 
+		public Categories()
+		{
+		}
+		public Categories(int categoryid)
+		{
+			this.CategoryID = categoryid;
+		}
+		public Categories(int categoryid, string categoryname, int typeid, string link, bool status, int sort)
+		{
+			this.CategoryID = categoryid;
+			this.CategoryName = categoryname;
+			this.TypeID = typeid;
+			this.Link = link;
+			this.Status = status;
+			this.Sort = sort;
+		}
+		#endregion
+
+		#region ***** Get Methods ***** 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Categories Populate(IDataReader myReader)
+		{
+			Categories obj = new Categories();
+			obj.CategoryID = (int) myReader["CategoryID"];
+			obj.CategoryName = (string) myReader["CategoryName"];
+			obj.TypeID = (int) myReader["TypeID"];
+			obj.Link = (string) myReader["Link"];
+			obj.Status = (bool) myReader["Status"];
+			obj.Sort = (int) myReader["Sort"];
+			return obj;
+		}
+
+		/// <summary>
+		/// Get Categories by categoryid
+		/// </summary>
+		/// <param name="categoryid">CategoryID</param>
+		/// <returns>Categories</returns>
+		public Categories GetByCategoryID(int categoryid)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Categories_GetByCategoryID", Data.CreateParameter("CategoryID", categoryid)))			{
+				if (reader.Read())
+				{
+					return Populate(reader);
+				}
+                reader.Close();
+                reader.Dispose();
+				return null;
+			}
+		}
+
+        /// <summary>
+        /// GetCategorybyTypeID
+        /// </summary>
+        /// <param name="categoryid"></param>
+        /// <returns></returns>
+        public List<Categories> GetCategorybyTypeID(int typeID)
+        {
+            using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Categories_GetByTypeID", Data.CreateParameter("TypeID", typeID)))
+            {
+                List<Categories> list = new List<Categories>();
+                while (reader.Read())
+                {
+                    list.Add(Populate(reader));
+                }
+                reader.Close();
+                reader.Dispose();
+                return list;
+            }
+        }
+		/// <summary>
+		/// Get all of Categories
+		/// </summary>
+		/// <returns>List<<Categories>></returns>
+		public List<Categories> GetList()
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Categories_Get"))
+			{
+				List<Categories> list = new List<Categories>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Categories
+		/// </summary>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSet()
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Categories_Get");
+		}
+
+
+		/// <summary>
+		/// Get all of Categories paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>List<<Categories>></returns>
+		public List<Categories> GetListPaged(int recperpage, int pageindex)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Categories_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex)))
+			{
+				List<Categories> list = new List<Categories>();
+				while (reader.Read())
+				{
+				 list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Categories paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSetPaged(int recperpage, int pageindex)
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Categories_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex));
+		}
+
+
+
+
+
+		#endregion
+
+		#region ***** Add Update Delete Methods ***** 
+		/// <summary>
+		/// Add a new Categories within Categories database table
+		/// </summary>
+		/// <param name="obj">Categories</param>
+		/// <returns>key of table</returns>
+		public int Add(Categories obj)
+		{
+			DbParameter parameterItemID = Data.CreateParameter("CategoryID", obj.CategoryID);
+			parameterItemID.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Categories_Add"
+							,parameterItemID
+							,Data.CreateParameter("CategoryName", obj.CategoryName)
+							,Data.CreateParameter("TypeID", obj.TypeID)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Status", obj.Status)
+							,Data.CreateParameter("Sort", obj.Sort)
+			);
+			return (int)parameterItemID.Value;
+		}
+
+		/// <summary>
+		/// updates the specified Categories
+		/// </summary>
+		/// <param name="obj">Categories</param>
+		/// <returns></returns>
+		public void Update(Categories obj)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Categories_Update"
+							,Data.CreateParameter("CategoryID", obj.CategoryID)
+							,Data.CreateParameter("CategoryName", obj.CategoryName)
+							,Data.CreateParameter("TypeID", obj.TypeID)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Status", obj.Status)
+							,Data.CreateParameter("Sort", obj.Sort)
+			);
+		}
+
+		/// <summary>
+		/// Delete the specified Categories
+		/// </summary>
+		/// <param name="categoryid">CategoryID</param>
+		/// <returns></returns>
+		public void Delete(int categoryid)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Categories_Delete", Data.CreateParameter("CategoryID", categoryid));
+		}
+		#endregion
+	}
+}

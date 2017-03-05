@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="CMS.master.cs" Inherits="MasterPage_CMS" %>
+<%@ Register Src="~/General/Cms/wucHeader.ascx" TagPrefix="wuc" TagName="Header" %>
+<%@ Register Src="~/General/Cms/wucLeft.ascx"  TagPrefix="wuc" TagName="Left" %>
+<%@ Register Src="~/General/Cms/wucRight.ascx" TagPrefix="wuc" TagName="Right"  %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../Css/CMS.css" rel="stylesheet" />
+     <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript" src="../js/scriptbreaker-multiple-accordion-1.js"></script>
+  
+    <script language="JavaScript">
+
+        $(document).ready(function () {
+            $(".topnav").accordion({
+                accordion: false,
+                speed: 300,
+                closedSign: '[+]',
+                openedSign: '[-]'
+            });
+        });
+
+</script>
+
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="scmanager" runat="server"></asp:ScriptManager>
+    <div>
+        <wuc:Header ID="header" runat="server" />
+        <div id="content">
+            <wuc:Left ID="left" runat="server" />
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+            </asp:ContentPlaceHolder>
+            <wuc:Right ID="right" runat="server" />
+        </div>
+    </div>
+    </form>
+</body>
+</html>

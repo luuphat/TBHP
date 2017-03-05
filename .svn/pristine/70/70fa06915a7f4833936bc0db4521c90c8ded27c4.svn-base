@@ -1,0 +1,169 @@
+﻿using DLLFuniture;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Libs;
+using DLLFuniture;
+
+public partial class General_wucMenu : System.Web.UI.UserControl
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {          
+            
+            BindingDataType();
+            LoadDataTopProduct();
+            LoadDataTopNews();
+        }
+    }
+  
+    protected void rptDataTypes_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        //get data 
+        if (e.Item.ItemIndex < 0) { return; }
+        Types type = (Types)e.Item.DataItem;
+        int typeid = Convert.ToInt32(type.TypeID);
+        Repeater rptcategory = (Repeater)e.Item.FindControl("rptDataCategory");
+        LoadCategorybyTypeID(typeid, rptcategory);
+    }
+
+    private void LoadCategorybyTypeID(int typeID, Repeater rpt)
+    {
+        try
+        {
+            CategoriesCollection col = null;
+            try
+            {
+                Data objdata = new Data(Global.ConnectionSql);
+                Categories obj = new Categories();
+                obj.DataObject = objdata;
+                col = obj.GetAll(string.Empty, typeID);
+                rpt.DataSource = col;
+                rpt.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Global.WriteLogError("LoadCategory()" + ex);
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadCategorybyTypeID --> home(): " + ex);
+        }
+    }
+
+    private void LoadDataTopProduct()
+    {
+        try
+        {
+            Data objdata = new Data(Global.ConnectionSql);
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            ProductsCollection col = obj.GetListTop();
+            if (col != null)
+            {
+                rptTopproduct.DataSource = col;
+                rptTopproduct.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadData Top product(): " + ex);
+        }
+    }
+
+    protected string cutTitle(string str, int skt)
+    {
+        string s = string.Empty;
+        if (str.Length > skt)
+        {
+            s = str.Substring(0, skt);
+            s = s + "...";
+        }
+        else
+            s = str;
+        return s;
+    }
+
+    private void LoadDataTopNews()
+    {
+        try
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("NewsID", typeof(int));
+            dt.Columns.Add("STT", typeof(int));
+            dt.Columns.Add("Title", typeof(string));
+            DataRow row;
+            Data objdata = new Data(Global.ConnectionSql);
+            News obj = new News();
+            obj.DataObject = objdata;
+            NewsCollection col = obj.GetListTop();
+            if (col !=null)
+            {
+                int i = 1;
+                foreach (News n in col)
+                {
+                    row = dt.NewRow();
+                    row["NewsID"] = n.NewsID;
+                    row["STT"] = i++;
+                    row["Title"] = n.Title;
+                    dt.Rows.Add(row);
+                }
+                rptTopNews.DataSource = dt;
+                rptTopNews.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadDataTopNews() : " + ex);
+        }
+    }
+
+    private TypesCollection LoadDataType(string stextsearch)
+    {
+        TypesCollection col = null;
+        try
+        {
+            Data objdata = new Data(Global.ConnectionSql);
+            Types obj = new Types();
+            obj.DataObject = objdata;
+            col = obj.Getlist(stextsearch);
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadDataType()" + ex);
+        }
+        return col;
+    }
+
+    private void BindingDataType()
+    {
+        try
+        {
+            TypesCollection col = null;
+            col = this.LoadDataType(string.Empty);
+            if (col == null)
+            {
+                col = new TypesCollection();
+                // lblCount.Text = "Có 0" + " record";
+                rptDataTypes.DataSource = col;
+                rptDataTypes.DataBind();
+            }
+            else
+            {
+                rptDataTypes.DataSource = col;
+                rptDataTypes.DataBind();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("BindingData()" + ex);
+        }
+    }
+}

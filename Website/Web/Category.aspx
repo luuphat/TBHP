@@ -1,0 +1,33 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masterpage/Web.master" AutoEventWireup="true" CodeFile="Category.aspx.cs" Inherits="Web_Category" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+      <td id="column-center" valign="top"><div class="column-center-padding">
+          <div class="centerColumn" id="indexDefault">
+            <div id="indexDefaultMainContent"></div>
+            <div class="centerBoxWrapper" id="featuredProducts">
+             <asp:Repeater ID="rptData" runat="server">
+                 <ItemTemplate>
+                     <h2 class="centerBoxHeading"><%#Eval("CategoryName") %></h2>
+                     <div class="centerBoxContentsFeatured centeredContent back">
+                         <div class="product-col">
+                             <div class="img"><a href="<% = Global.Root %>/Web/ProductDetail.aspx?id=<%#Eval("NewsID") %>">
+                                 <img src="../images/01.jpg" width="150" height="150" /></a></div>
+                             <div class="prod-info">
+                                 <a class="name" href="<% = Global.Root %>/Web/ProductDetail.aspx?id=<%#Eval("NewsID") %>"><strong><%#Eval("Title") %></strong></a>
+                                 <div class="prod-code"><%#Eval("NewsID") %></div>
+                                 <div class="text"><%#Eval("Description") %> </div>
+                                 <div class="wrapper">
+                                     <div class="price"><a href="<% = Global.Root %>/Web/ProductDetail.aspx?id=<%#Eval("NewsID") %>">Chi tiết ></a></div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </ItemTemplate>
+             </asp:Repeater>
+                   
+              <br class="clearBoth"/>            
+              <div class="clear"></div>
+            </div>
+          </div> </div></td>
+</asp:Content>
+

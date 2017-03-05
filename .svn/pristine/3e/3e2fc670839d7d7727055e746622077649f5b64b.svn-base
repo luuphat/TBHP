@@ -1,0 +1,211 @@
+﻿using DLLFuniture;
+using Libs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class admin_control_wucproduct_edit : System.Web.UI.UserControl
+{
+    public int NewsID
+    {
+        get
+        {
+            object obj = ViewState["NewsID"];
+            return ((obj == null) ? -1 : Convert.ToInt32(ViewState["NewsID"]));
+        }
+        set { ViewState["NewsID"] = value; }
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            if (!string.IsNullOrEmpty(Request["pid"]))
+            {
+                NewsID = Convert.ToInt32(Request["pid"]);
+                IniUpdate(NewsID);
+            }
+        }
+    }
+
+    private void LoadDDL()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+
+            Category objcategory = new Category();
+            objcategory.DataObject = objdata;
+            ddlCategory.Items.Clear();
+            //ddlCategory.Items.Insert(0, new ListItem("------[Tất cả]-----", "-1"));
+            CategoryCollection col = objcategory.GetAll(string.Empty,-1);
+            if (col == null) { return; }
+            int baseID = 0;
+            foreach (Category category in col)
+            {
+                if (category.ParentID < baseID)
+                {
+                    baseID = category.ParentID;
+                }
+            }
+            foreach (Category category in col)
+            {
+                if (category.ParentID == baseID)
+                {
+                    ddlCategory.Items.Add(new ListItem(category.CategoryName, category.CategoryID.ToString()));
+                    AddChildrenHandle(category.CategoryID, col);
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("Update () " + ex);
+
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+    private void AddChildrenHandle(int ParentID, CategoryCollection col)
+    {
+        // recursive tree loader. Passes back in a node to retireve its childre until there are no more children for this node.
+        foreach (Category category in col)                     // locate all children of this category
+        {
+            if (category.ParentID == ParentID)                 // found a child
+            {
+                string sTab = "....";
+                ddlCategory.Items.Add(new ListItem(sTab + category.CategoryName, category.CategoryID.ToString()));
+                AddChildrenHandle(category.CategoryID, col);                     // find this child's children
+            }
+        }
+    }
+
+    private void IniUpdate(int NewsID)
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            lblHandleTitle.Text = "Sửa sản phẩm";
+            LoadDDL();
+            imgImages.ImageUrl = Global.Root + Global.GetConfigKey("uploadproduct") + "alternate.png";
+            if (obj.GetByID(NewsID))
+            {
+                if (!string.IsNullOrEmpty(obj.Image))
+                {
+                    imgImages.ImageUrl = obj.Image;
+                    imgImages.Attributes.Add("images", obj.Image);
+                }
+                txtTitle.Text = obj.Title;
+                txtProductCode.Text = obj.ProductCode;
+                txtDescription.Text = obj.Description;
+                ddlCategory.SelectedValue = obj.CategoryID.ToString();
+                radContents.Content = obj.Detail;
+                cbkMostSale.Checked = obj.IsMostSale;
+                ddlCategory.SelectedValue = obj.CategoryID.ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("IniUpdate() " + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+
+    }
+
+    private void Update(int NewsID)
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        try
+        {
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            obj.NewsID = NewsID;
+            obj.Title = txtTitle.Text.Trim();
+            obj.ProductCode = txtProductCode.Text.Trim().ToUpper();
+            obj.Description = txtDescription.Text.Trim();
+            obj.Detail = radContents.Content;
+            obj.CategoryID = Convert.ToInt32(ddlCategory.SelectedValue);
+            obj.IsActived = true;
+            obj.Date = DateTime.Now;
+            obj.IsMostSale = cbkMostSale.Checked;
+            obj.Links = txtTitle.Text.Trim().Replace(" ", "-");
+            //GetImage
+            if (!string.IsNullOrEmpty(imgImages.Attributes["images"]))
+            {
+                obj.Image = imgImages.Attributes["images"];
+            }
+            if (this.uplImage.HasFile)
+            {
+                Neodynamic.WebControls.ImageDraw.ImageElement uploadedImage;
+                uploadedImage = Neodynamic.WebControls.ImageDraw.ImageElement.FromBinary(this.uplImage.FileBytes);
+                Neodynamic.WebControls.ImageDraw.Resize actResize = new Neodynamic.WebControls.ImageDraw.Resize();
+                actResize.Width = 150;
+                actResize.Height = 150;
+                uploadedImage.Actions.Add(actResize);
+                Neodynamic.WebControls.ImageDraw.ImageDraw imgDraw = new Neodynamic.WebControls.ImageDraw.ImageDraw();
+                imgDraw.Elements.Add(uploadedImage);
+                imgDraw.ImageFormat = Neodynamic.WebControls.ImageDraw.ImageDrawFormat.Jpeg;
+                imgDraw.JpegCompressionLevel = 90;
+                string filename = GetDate + "_" + uplImage.FileName;
+                imgDraw.Save(Server.MapPath(Global.GetConfigKey("uploadproduct") + filename));
+                obj.Image = Global.GetConfigKey("uploadproduct") + filename;
+            }
+            int iResult = Convert.ToInt32(obj.Update());
+            if (iResult > 0)
+            {
+                Response.Write("<script>window.location='product.aspx'</script>");
+
+            }
+            else if (iResult == 0)
+            {
+
+                lblMessage.Text = "Trùng dữ liệu vui lòng kiểm tra lại";
+                return;
+            }
+            else
+            {
+                lblMessage.Text = "Lỗi xảy ra trong quá trình lưu dữ liệu. Liên hệ với người quản trị để khắc phục";
+                return;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("Update () " + ex);
+            return;
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+    }
+
+    protected void btnOk_Click(object sender, EventArgs e)
+    {
+        Update(NewsID);
+    }
+
+    string GetDate
+    {
+        get
+        {
+            return DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+        }
+    }
+
+    protected void btnReset_Click(object sender, EventArgs e)
+    {
+        Response.Write("<script>window.location='product.aspx'</script>");
+    }
+}

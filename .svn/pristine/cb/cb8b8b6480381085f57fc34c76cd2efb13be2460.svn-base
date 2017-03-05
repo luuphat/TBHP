@@ -1,0 +1,428 @@
+﻿using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.Common;
+using tbhp.DataAccess;
+
+namespace tbhp.DataAccess
+{
+	public class Products
+	{
+		#region ***** Fields & Properties ***** 
+		private int _NewsID;
+		public int NewsID
+		{ 
+			get 
+			{ 
+				return _NewsID;
+			}
+			set 
+			{ 
+				_NewsID = value;
+			}
+		}
+		private int _CategoryID;
+		public int CategoryID
+		{ 
+			get 
+			{ 
+				return _CategoryID;
+			}
+			set 
+			{ 
+				_CategoryID = value;
+			}
+		}
+
+		private string _Title;
+		public string Title
+		{ 
+			get 
+			{ 
+				return _Title;
+			}
+			set 
+			{ 
+				_Title = value;
+			}
+		}
+
+        private string _CategoryName;
+        public string CategoryName
+        {
+            get
+            {
+                return _CategoryName;
+            }
+            set
+            {
+                _CategoryName = value;
+            }
+        }
+
+
+        private string _TypeName;
+        public string TypeName
+        {
+            get
+            {
+                return _TypeName;
+            }
+            set
+            {
+                _TypeName = value;
+            }
+        }
+
+		private string _Link;
+		public string Link
+		{ 
+			get 
+			{ 
+				return _Link;
+			}
+			set 
+			{ 
+				_Link = value;
+			}
+		}
+
+		private string _Description;
+		public string Description
+		{ 
+			get 
+			{ 
+				return _Description;
+			}
+			set 
+			{ 
+				_Description = value;
+			}
+		}
+
+		private string _Detail;
+		public string Detail
+		{ 
+			get 
+			{ 
+				return _Detail;
+			}
+			set 
+			{ 
+				_Detail = value;
+			}
+		}
+
+		private string _Image;
+		public string Image
+		{ 
+			get 
+			{ 
+				return _Image;
+			}
+			set 
+			{ 
+				_Image = value;
+			}
+		}
+
+		private DateTime _Date;
+		public DateTime Date
+		{ 
+			get 
+			{ 
+				return _Date;
+			}
+			set 
+			{ 
+				_Date = value;
+			}
+		}
+
+		private bool _Status;
+		public bool Status
+		{ 
+			get 
+			{ 
+				return _Status;
+			}
+			set 
+			{ 
+				_Status = value;
+			}
+		}
+
+		#endregion
+
+		#region ***** Init Methods ***** 
+		public Products()
+		{
+		}
+		public Products(int newsid)
+		{
+			this.NewsID = newsid;
+		}
+		public Products(int newsid, int categoryid, string title, string link, string description, string detail, string image, DateTime date, bool status)
+		{
+			this.NewsID = newsid;
+			this.CategoryID = categoryid;
+			this.Title = title;
+			this.Link = link;
+			this.Description = description;
+			this.Detail = detail;
+			this.Image = image;
+			this.Date = date;
+			this.Status = status;
+		}
+		#endregion
+
+		#region ***** Get Methods ***** 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Products Populate(IDataReader myReader)
+		{
+			Products obj = new Products();
+			obj.NewsID = (int) myReader["NewsID"];
+			obj.CategoryID = (int) myReader["CategoryID"];
+			obj.Title = (string) myReader["Title"];
+			obj.Link = (string) myReader["Link"];
+			obj.Description = (string) myReader["Description"];
+			obj.Detail = (string) myReader["Detail"];
+			obj.Image = (string) myReader["Image"];
+			obj.Date = (DateTime) myReader["Date"];
+			obj.Status = (bool) myReader["Status"];
+			return obj;
+		}
+
+        public Products PopulateHome(IDataReader myReader)
+        {
+            Products obj = new Products();
+            obj.NewsID = (int)myReader["NewsID"];
+            obj.CategoryID = (int)myReader["CategoryID"];
+            obj.CategoryName = (string)myReader["CategoryName"];
+            obj.TypeName = (string)myReader["TypeName"];
+            obj.Title = (string)myReader["Title"];
+            obj.Link = (string)myReader["Link"];
+            obj.Description = (string)myReader["Description"];
+            obj.Detail = (string)myReader["Detail"];
+            obj.Image = (string)myReader["Image"];
+            obj.Date = (DateTime)myReader["Date"];
+            obj.Status = (bool)myReader["Status"];
+            return obj;
+        }
+
+        public Products PopulateProduct(IDataReader myReader)
+        {
+            Products obj = new Products();
+            obj.NewsID = (int)myReader["NewsID"];
+            obj.CategoryID = (int)myReader["CategoryID"];
+            obj.CategoryName = (string)myReader["CategoryName"];     
+            obj.Title = (string)myReader["Title"];
+            obj.Link = (string)myReader["Link"];
+            obj.Description = (string)myReader["Description"];
+            obj.Detail = (string)myReader["Detail"];
+            obj.Image = (string)myReader["Image"];
+            obj.Date = (DateTime)myReader["Date"];
+            obj.Status = (bool)myReader["Status"];
+            return obj;
+        }
+		/// <summary>
+		/// Get Products by newsid
+		/// </summary>
+		/// <param name="newsid">NewsID</param>
+		/// <returns>Products</returns>
+		public Products GetByNewsID(int newsid)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Products_GetByNewsID", Data.CreateParameter("NewsID", newsid)))			{
+				if (reader.Read())
+				{
+					return Populate(reader);
+				}
+                reader.Close();
+                reader.Dispose();
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Get all of Products
+		/// </summary>
+		/// <returns>List<<Products>></returns>
+		public List<Products> GetList()
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Products_Get"))
+			{
+				List<Products> list = new List<Products>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+
+        public List<Products> GetListTop()
+        {
+            using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Products_Get_Top"))
+            {
+                List<Products> list = new List<Products>();
+                while (reader.Read())
+                {
+                    list.Add(Populate(reader));
+                }
+                reader.Close();
+                reader.Dispose();
+                return list;
+            }
+        }
+        /// <summary>
+        /// GetList product default
+        /// </summary>
+        /// <returns></returns>
+        public List<Products> GetListIndex()
+        {
+            using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Product_Getlist"))
+            {
+                List<Products> list = new List<Products>();
+                while (reader.Read())
+                {
+                    list.Add(PopulateHome(reader));
+                }
+                reader.Close();
+                reader.Dispose();
+                return list;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<Products> GetListProductbyCategoryID(int CategoryID)
+        {
+            using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Categories_GetlistProductbyCategoryID", Data.CreateParameter("CategoryID", CategoryID)))
+            {
+                List<Products> list = new List<Products>();
+                while (reader.Read())
+                {
+                    list.Add(PopulateProduct(reader));
+                }
+                reader.Close();
+                reader.Dispose();
+                return list;
+            }
+        }
+		/// <summary>
+		/// Get DataSet of Products
+		/// </summary>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSet()
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Products_Get");
+		}
+
+
+		/// <summary>
+		/// Get all of Products paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>List<<Products>></returns>
+		public List<Products> GetListPaged(int recperpage, int pageindex)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Products_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex)))
+			{
+				List<Products> list = new List<Products>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Products paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSetPaged(int recperpage, int pageindex)
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Products_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex));
+		}
+
+
+
+
+
+		#endregion
+
+		#region ***** Add Update Delete Methods ***** 
+		/// <summary>
+		/// Add a new Products within Products database table
+		/// </summary>
+		/// <param name="obj">Products</param>
+		/// <returns>key of table</returns>
+		public int Add(Products obj)
+		{
+			DbParameter parameterItemID = Data.CreateParameter("NewsID", obj.NewsID);
+			parameterItemID.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Products_Add"
+							,parameterItemID
+							,Data.CreateParameter("CategoryID", obj.CategoryID)
+							,Data.CreateParameter("Title", obj.Title)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Description", obj.Description)
+							,Data.CreateParameter("Detail", obj.Detail)
+							,Data.CreateParameter("Image", obj.Image)
+							,Data.CreateParameter("Date", obj.Date)
+							,Data.CreateParameter("Status", obj.Status)
+			);
+			return (int)parameterItemID.Value;
+		}
+
+		/// <summary>
+		/// updates the specified Products
+		/// </summary>
+		/// <param name="obj">Products</param>
+		/// <returns></returns>
+		public void Update(Products obj)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Products_Update"
+							,Data.CreateParameter("NewsID", obj.NewsID)
+							,Data.CreateParameter("CategoryID", obj.CategoryID)
+							,Data.CreateParameter("Title", obj.Title)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Description", obj.Description)
+							,Data.CreateParameter("Detail", obj.Detail)
+							,Data.CreateParameter("Image", obj.Image)
+							,Data.CreateParameter("Status", obj.Status)
+			);
+		}
+
+		/// <summary>
+		/// Delete the specified Products
+		/// </summary>
+		/// <param name="newsid">NewsID</param>
+		/// <returns></returns>
+		public void Delete(int newsid)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Products_Delete", Data.CreateParameter("NewsID", newsid));
+		}
+		#endregion
+	}
+}

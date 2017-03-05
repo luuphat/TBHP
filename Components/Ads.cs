@@ -1,0 +1,339 @@
+﻿using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.Common;
+using tbhp.DataAccess;
+
+namespace tbhp.DataAccess
+{
+	public class Ads
+	{
+		#region ***** Fields & Properties ***** 
+		private int _Id;
+		public int Id
+		{ 
+			get 
+			{ 
+				return _Id;
+			}
+			set 
+			{ 
+				_Id = value;
+			}
+		}
+		private string _Name;
+		public string Name
+		{ 
+			get 
+			{ 
+				return _Name;
+			}
+			set 
+			{ 
+				_Name = value;
+			}
+		}
+		private string _Image;
+		public string Image
+		{ 
+			get 
+			{ 
+				return _Image;
+			}
+			set 
+			{ 
+				_Image = value;
+			}
+		}
+		private string _Link;
+		public string Link
+		{ 
+			get 
+			{ 
+				return _Link;
+			}
+			set 
+			{ 
+				_Link = value;
+			}
+		}
+		private string _Location;
+		public string Location
+		{ 
+			get 
+			{ 
+				return _Location;
+			}
+			set 
+			{ 
+				_Location = value;
+			}
+		}
+		private string _Type;
+		public string Type
+		{ 
+			get 
+			{ 
+				return _Type;
+			}
+			set 
+			{ 
+				_Type = value;
+			}
+		}
+        private int _Width;
+        public int Width
+        {
+            get
+            {
+                return _Width;
+            }
+            set
+            {
+                _Width = value;
+            }
+        }
+        private int _Height;
+        public int Height
+        {
+            get
+            {
+                return _Height;
+            }
+            set
+            {
+                _Height = value;
+            }
+        }
+        private int _View;
+        public int View
+        {
+            get
+            {
+                return _View;
+            }
+            set
+            {
+                _View = value;
+            }
+        }
+		private bool _Status;
+		public bool Status
+		{ 
+			get 
+			{ 
+				return _Status;
+			}
+			set 
+			{ 
+				_Status = value;
+			}
+		}
+		private int _Item;
+		public int Item
+		{ 
+			get 
+			{ 
+				return _Item;
+			}
+			set 
+			{ 
+				_Item = value;
+			}
+		}
+		#endregion
+
+		#region ***** Init Methods ***** 
+		public Ads()
+		{
+		}
+		public Ads(int id)
+		{
+			this.Id = id;
+		}
+		public Ads(int id, string name, string image, string link, string location, string type, bool status, int item)
+		{
+			this.Id = id;
+			this.Name = name;
+			this.Image = image;
+			this.Link = link;
+			this.Location = location;
+			this.Type = type;
+			this.Status = status;
+			this.Item = item;
+		}
+		#endregion
+
+		#region ***** Get Methods ***** 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Ads Populate(IDataReader myReader)
+		{
+			Ads obj = new Ads();
+			obj.Id = (int) myReader["Id"];
+			obj.Name = (string) myReader["Name"];
+			obj.Image = (string) myReader["Image"];
+			obj.Link = (string) myReader["Link"];
+			obj.Location = (string) myReader["Location"];
+			obj.Type = (string) myReader["Type"];
+            obj.Width = (int)myReader["Width"];
+            obj.Height = (int)myReader["Height"];
+            obj.View = (int)myReader["View"];
+			obj.Status = (bool) myReader["Status"];
+			obj.Item = (int) myReader["Item"];
+			return obj;
+		}
+
+		/// <summary>
+		/// Get Ads by id
+		/// </summary>
+		/// <param name="id">Id</param>
+		/// <returns>Ads</returns>
+		public Ads GetById(int id)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Ads_GetById", Data.CreateParameter("Id", id)))			{
+				if (reader.Read())
+				{
+					return Populate(reader);                    
+				}
+                reader.Close();
+                reader.Dispose();
+				return null;               
+			}
+		}
+
+		/// <summary>
+		/// Get all of Ads
+		/// </summary>
+		/// <returns>List<<Ads>></returns>
+		public List<Ads> GetList()
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Ads_Get"))
+			{
+				List<Ads> list = new List<Ads>();
+				while (reader.Read())
+				{
+				    list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;              
+			}           
+		}
+
+		/// <summary>
+		/// Get DataSet of Ads
+		/// </summary>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSet()
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Ads_Get");
+		}
+
+
+		/// <summary>
+		/// Get all of Ads paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>List<<Ads>></returns>
+		public List<Ads> GetListPaged(int recperpage, int pageindex)
+		{
+			using (IDataReader reader = SqlHelper.ExecuteReader(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Ads_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex)))
+			{
+				List<Ads> list = new List<Ads>();
+				while (reader.Read())
+				{
+				list.Add(Populate(reader));
+				}
+                reader.Close();
+                reader.Dispose();
+				return list;               
+			}
+		}
+
+		/// <summary>
+		/// Get DataSet of Ads paged
+		/// </summary>
+		/// <param name="recperpage">record per page</param>
+		/// <param name="pageindex">page index</param>
+		/// <returns>DataSet</returns>
+		public DataSet GetDataSetPaged(int recperpage, int pageindex)
+		{
+			return SqlHelper.ExecuteDataSet(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Ads_GetPaged"
+							,Data.CreateParameter("recperpage", recperpage)
+							,Data.CreateParameter("pageindex", pageindex));
+		}
+
+		#endregion
+
+		#region ***** Add Update Delete Methods ***** 
+		/// <summary>
+		/// Add a new Ads within Ads database table
+		/// </summary>
+		/// <param name="obj">Ads</param>
+		/// <returns>key of table</returns>
+		public int Add(Ads obj)
+		{
+			DbParameter parameterItemID = Data.CreateParameter("Id", obj.Id);
+			parameterItemID.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Ads_Add"
+							,parameterItemID
+							,Data.CreateParameter("Name", obj.Name)
+							,Data.CreateParameter("Image", obj.Image)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Location", obj.Location)
+							,Data.CreateParameter("Type", obj.Type)
+                            ,Data.CreateParameter("Width", obj.Width)
+                            ,Data.CreateParameter("Height", obj.Height)
+                            ,Data.CreateParameter("View", obj.View)
+							,Data.CreateParameter("Status", obj.Status)
+							,Data.CreateParameter("Item", obj.Item)
+			);
+			return (int)parameterItemID.Value;
+		}
+
+		/// <summary>
+		/// updates the specified Ads
+		/// </summary>
+		/// <param name="obj">Ads</param>
+		/// <returns></returns>
+		public void Update(Ads obj)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Ads_Update"
+							,Data.CreateParameter("Id", obj.Id)
+							,Data.CreateParameter("Name", obj.Name)
+							,Data.CreateParameter("Image", obj.Image)
+							,Data.CreateParameter("Link", obj.Link)
+							,Data.CreateParameter("Location", obj.Location)
+							,Data.CreateParameter("Type", obj.Type)
+                            , Data.CreateParameter("Width", obj.Width)
+                            , Data.CreateParameter("Height", obj.Height)
+							,Data.CreateParameter("Status", obj.Status)
+							,Data.CreateParameter("Item", obj.Item)
+			);
+		}
+        public void UpdateView(int id)
+        {
+            SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure, "sproc_Ads_UpdateView"
+                            , Data.CreateParameter("Id", id)
+            );
+        }
+		/// <summary>
+		/// Delete the specified Ads
+		/// </summary>
+		/// <param name="id">Id</param>
+		/// <returns></returns>
+		public void Delete(int id)
+		{
+			SqlHelper.ExecuteNonQuery(Data.ConnectionString, CommandType.StoredProcedure,"sproc_Ads_Delete", Data.CreateParameter("Id", id));
+		}
+		#endregion
+	}
+}

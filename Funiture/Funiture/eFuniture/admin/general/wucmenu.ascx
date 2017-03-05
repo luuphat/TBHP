@@ -1,0 +1,49 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="wucmenu.ascx.cs" Inherits="admin_general_wucmenu" %>
+
+
+<%--<script type="text/javascript">
+    $(document).ready(function () {
+        if (window.location.href.indexOf("Profile") > -1) {          
+            $("#Profile").addClass('current');
+            return;
+        }
+    })
+</script>--%>
+ <div class="mainleft">
+          	<div class="mainleftinner">
+            
+              	<div class="leftmenu">
+            		<ul>
+                        <li><a href="#" class="dashboard menudrop widgets"><span>Danh mục</span></a>
+                              <ul>
+                            	<li><a href="../admin/CreateEditCategory.aspx" ><span>Thêm mới thể loại</span></a></li>                            	
+                                <li><a href="../admin/Category.aspx"><span>Danh sách thể loại</span></a></li>                            	
+                            </ul>
+                        </li>
+                    	<li><a href="#" class="widgets menudrop tables" ><span>Sản phẩm</span></a>
+                                <ul>
+                            	<li><a href="../admin/product_add.aspx"><span>Thêm mới sản phẩm</span></a></li>                            	
+                                <li><a href="../admin/product.aspx"><span>Danh sách sản phẩm</span></a></li>                            	
+                            </ul>
+                    	</li>
+                        <li><a href="#" class="elements menudrop elements"><span>Tin tức</span></a>
+                            <ul>
+                            	<li><a href="../admin/news_add.aspx"><span>Thêm mới tin tức</span></a></li>                            	
+                                <li><a href="../admin/news.aspx"><span>Danh sách tin tức</span></a></li>                            	
+                            </ul>
+                        </li>
+                    <%--    <li><a href="../admin/size.aspx" class="grid"><span>Kích thước</span></a></li>
+                        <li><a href="../admin/unit.aspx" class="grid"><span>Đơn vị tính</span></a></li>--%>
+
+                        <li><a href="../admin/content.aspx" class="grid"><span>Giới thiệu</span></a></li>
+                        <li><a href="../admin/setting.aspx" class="charts"><span>Cấu hình chung</span></a></li>
+                         <li><a href="../admin/footer.aspx" class="charts"><span>Footer</span></a></li>
+                        <li><a href="../admin/sysusers.aspx" class="grid"><span>User</span></a></li>
+                        <li><a href="../admin/AdsSlide.aspx" class="elements"><span>Slide ảnh</span></a></li>
+                       <%-- <li><a href="#" class="calendar"><span>Calendar</span></a></li>--%>
+                    </ul>
+                        
+                </div><!--leftmenu-->
+            	<div id="togglemenuleft"><a></a></div>
+            </div><!--mainleftinner-->
+        </div><!--mainleft-->

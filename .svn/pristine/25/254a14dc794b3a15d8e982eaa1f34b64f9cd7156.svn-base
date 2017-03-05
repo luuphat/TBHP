@@ -1,0 +1,74 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masterpage/Web.master" AutoEventWireup="true" CodeFile="ProductDetail.aspx.cs" Inherits="Web_ProductDetail" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+     <td id="column-center" valign="top"  style="padding-top:12px;"><div class="column-center-padding">
+          <div class="centerColumn" id="indexDefault">
+            <div id="indexDefaultMainContent"></div>
+            <div class="centerBoxWrapper" id="featuredProducts">
+              <h2 class="centerBoxHeading">Chi tiết</h2>
+              <div class="centerBoxContentsFeatured centeredContent back"></div>
+              <div class="detail">
+                <div  class="detail_left">
+                   <iframe  src="slide.aspx?id=<% = productID %>" width="345" height="430" frameBorder="0" scrolling="no"></iframe>
+                </div>
+                <div  class="detail_right">
+                  <p class="ttdetail"> <% = sTitle %> </p>
+                  <p>Mã sản phẩm: <span class="red"> <strong><% = productcode %> </strong> </span> </p>
+                  <div class="kt">
+                    <p><% = description %> </p>
+                    <p><asp:Repeater ID="rptDataTopRelate" runat="server">
+                        <ItemTemplate>
+                            <%#Eval("STT") %>.<%#Eval("Title") %>(  <%#Eval("ProductCode") %>)<br />
+                        </ItemTemplate>
+                       </asp:Repeater>
+                        
+                     </p>
+                  </div>
+                </div>
+              </div>
+              <p><img src="../Images/line.jpg" /></p>
+              <div  class="detail">
+                <p style="font-size:18px"><strong>Mô tả</strong></p>
+                <p> <%= content %> </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column-center-padding">
+          <div class="centerColumn" id="Div1">
+            <div id="Div2"></div>
+            <div class="centerBoxWrapper" id="Div3">
+              <h2 class="centerBoxHeading">Sản Phẩm Liên Quan </h2>
+                <asp:Repeater ID="rptRelate" runat="server">
+                    <ItemTemplate>
+                         <div class="centerBoxContentsFeatured centeredContent back">
+                              <div style="height:275px;margin-top:5px;padding-bottom:10px;">
+                               <div class="product-col">
+                              <div class="img"> <a href="<% = Global.Root %>/Web/ProductDetail.aspx?cid=<%#Eval("CategoryID") %>&id=<%#Eval("NewsID") %>"><img src="<%#Eval("Image") %>" width="150" height="150"/></a></div>
+                             
+                            </div>
+                               <div class="prod-info"> <a class="name" href="<% = Global.Root %>/Web/ProductDetail.aspx?cid=<%#Eval("CategoryID") %>&id=<%#Eval("NewsID") %>"><strong><%#Eval("Title") %></strong></a>
+                                <div class="prod-code"><%#Eval("ProductCode") %></div>
+                                <div class="text"><%#Eval("Description") %></div>
+                                <div class="wrapper">
+                                  <div class="price"><a href="<% = Global.Root %>/Web/ProductDetail.aspx?cid=<%#Eval("CategoryID") %>&id=<%#Eval("NewsID") %>">Chi tiết ></a></div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+               
+
+              <br class="clearBoth"/>
+            </div>
+          </div>
+        </div>
+      
+    
+      </td>
+    
+</asp:Content>
+

@@ -1,0 +1,16 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Masterpage/Web.master" AutoEventWireup="true" CodeFile="Subject.aspx.cs" Inherits="Web_Subject" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <td id="column-center" valign="top"><div class="column-center-padding">
+            <div class="centerColumn" id="indexDefault">
+              <div id="indexDefaultMainContent"></div>
+              <div class="centerBoxWrapper" id="featuredProducts">
+                <h2 class="centerBoxHeading">Tin Tức</h2>
+                <div class="centerBoxContentsFeatured centeredContent back"></div>
+                
+              </div>
+            </div>
+          </div></td>
+
+</asp:Content>
+

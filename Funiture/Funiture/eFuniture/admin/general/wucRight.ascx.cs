@@ -1,0 +1,75 @@
+﻿using DLLFuniture;
+using Libs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class admin_general_wucRight : System.Web.UI.UserControl
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            //if (Session["username"] == null)
+            //{
+            //    Response.Redirect("~/Login/Login.aspx");
+            //}
+           // LoadProductmost();
+          //  LoadProductleast();
+        }
+    }
+    private ProductsCollection LoadProductmost()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        ProductsCollection col = null;
+        try
+        {
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            col = obj.GetListTopmost();
+            if (col != null)
+            {
+                rptdatamost.DataSource = col;
+                rptdatamost.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadProductmost()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+        return col;
+    }
+
+    private ProductsCollection LoadProductleast()
+    {
+        Data objdata = new Data(Global.ConnectionSql);
+        ProductsCollection col = null;
+        try
+        {
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            col = obj.GetListTopleast();
+            if (col != null)
+            {
+                rptdataleast.DataSource = col;
+                rptdataleast.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadProductleast()" + ex);
+        }
+        finally
+        {
+            objdata.DeConnect();
+        }
+        return col;
+    }
+}

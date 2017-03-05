@@ -1,0 +1,50 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="admin.master.cs" Inherits="Masterpage_admin" %>
+<%@ Register Src="~/admin/general/wucHeader.ascx" TagPrefix="wuc" TagName="header" %>
+<%@ Register Src="~/admin/general/wucmenu.ascx" TagPrefix="wuc" TagName="Menu" %>
+<%@ Register Src="~/admin/general/wucfooter.ascx" TagPrefix="wuc" TagName="Footer" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="../admin/css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="../admin/js/plugins/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="../admin/js/plugins/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="../admin/js/plugins/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../admin/js/custom/general.js"></script>
+    <script type="text/javascript" src="../admin/js/custom/form.js"></script>
+
+    <script type="text/javascript" src="../admin/js/plugins/jquery.effects.core.min.js"></script>
+    <script type="text/javascript" src="../admin/js/plugins/jquery.effects.explode.min.js"></script>
+    <script type="text/javascript" src="../admin/js/plugins/jquery.colorbox-min.js"></script>  
+    <script type="text/javascript" src="js/custom/media.js"></script>
+
+    <!--[if lt IE 9]>
+	    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+<body class="loggedin">
+    <form id="form1" runat="server" >
+        <asp:ScriptManager ID="scrmanager" runat="server"></asp:ScriptManager>
+    <div>
+      <wuc:header ID="header" runat="server" />
+    <!-- START OF MAIN CONTENT -->
+    <div class="mainwrapper">
+     	<div class="mainwrapperinner">         	
+            <wuc:Menu ID="menu" runat="server" />
+       <!-- END OF MAIN CONTENT -->
+        <div class="maincontent noright">
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+            </asp:ContentPlaceHolder>
+           
+         </div>      
+     	</div><!--mainwrapperinner-->
+         
+    </div><!--mainwrapper-->
+	 <div> <wuc:Footer ID="footer" runat="server" /></div>
+    </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Web.master.cs" Inherits="Masterpage_Web" %>
+<%@ Register Src="~/General/Web/wucHeader.ascx" TagPrefix="wuc" TagName="Header" %>
+<%@ Register Src="~/General/Web/wucFooter.ascx" TagPrefix="wuc" TagName="Footer" %>
+<%@ Register Src="~/General/Web/wucMenu.ascx" TagPrefix="wuc" TagName="Menu" %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Thiết Bị Hồng Phúc </title>   
+    <meta name="keywords" content="thiet bi noi that hong phuc,nội thất hồng đức,noi that,nội thất,hong phuc,Hồng phúc,nội thất hồng phúc, thiết bị hồng phúc"> 
+    <meta name="description" content="noi that hong phuc,Công ty nội thất hồng phúc chuyên cung ứng nội thất văn phòng,thiết bị giáo dục,đồ chơi,thiết bị mầm non">
+    <link href="../css/demo.css" rel="stylesheet" />
+    <link href="../css/nivo-slider.css" rel="stylesheet" />
+    <link href="../css/stylesheet.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="../js/jquery.collapse.js"></script>
+    <script type="text/javascript" src="../js/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.nivo.slider.pack.js"></script>
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('#slider').nivoSlider();
+        });
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <div class="extra1">
+                <div class="main-width">
+                    <wuc:Header ID="header" runat="server" />
+                    <table border="0" cellspacing="0" cellpadding="0" width="100%" id="contentMainWrapper">
+                        <tr>
+                            <wuc:Menu ID="menu" runat="server" />
+                            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                            </asp:ContentPlaceHolder>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <wuc:Footer ID="footer" runat="server" />
+        </div>
+    </form>
+</body>
+</html>

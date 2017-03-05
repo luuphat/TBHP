@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Libs;
+using DLLFuniture;
+public partial class Web_Category : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            if (!string.IsNullOrEmpty(Request["cid"]))
+            {
+                LoadProductbyCategoryID(Convert.ToInt32(Request["cid"]));
+            }
+        }
+    }
+    private void LoadProductbyCategoryID(int CategoryID)
+    {
+        try
+        {
+            Data objdata = new Data(Global.ConnectionSql);
+            Products obj = new Products();
+            obj.DataObject = objdata;
+            ProductsCollection col = obj.GetListByCategoryID(CategoryID);            
+            if (col != null)
+            {
+                rptData.DataSource = col;
+                rptData.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Global.WriteLogError("LoadProductbyCategoryID home(): " + ex);
+        }
+    }
+}
